@@ -1,13 +1,11 @@
 use std::fs;
 
 fn first(content: &str) -> u32 {
-    let mut data = Vec::<Vec<u32>>::new();
-    data.push(Vec::new());
-    data.push(Vec::new());
+    let mut data = [Vec::new(), Vec::new()];
     content.lines().for_each(|line| {
         let vals = line.split_ascii_whitespace().collect::<Vec<_>>();
-        data[0].push(vals.iter().next().unwrap().parse::<u32>().unwrap());
-        data[1].push(vals.iter().skip(1).next().unwrap().parse::<u32>().unwrap());
+        data[0].push(vals.first().unwrap().parse::<u32>().unwrap());
+        data[1].push(vals.get(1).unwrap().parse::<u32>().unwrap());
     });
     data[0].sort();
     data[1].sort();
@@ -19,13 +17,11 @@ fn first(content: &str) -> u32 {
 }
 
 fn second(content: &str) -> u32 {
-    let mut data = Vec::<Vec<u32>>::new();
-    data.push(Vec::new());
-    data.push(Vec::new());
+    let mut data = [Vec::new(), Vec::new()];
     content.lines().for_each(|line| {
         let vals = line.split_ascii_whitespace().collect::<Vec<_>>();
-        data[0].push(vals.iter().next().unwrap().parse::<u32>().unwrap());
-        data[1].push(vals.iter().skip(1).next().unwrap().parse::<u32>().unwrap());
+        data[0].push(vals.first().unwrap().parse::<u32>().unwrap());
+        data[1].push(vals.get(1).unwrap().parse::<u32>().unwrap());
     });
     data[0]
         .iter()
@@ -37,6 +33,6 @@ fn main() {
     let content = fs::read_to_string("input").expect("file not found");
     let content = content.trim();
 
-    println!("1: {}", first(&content));
-    println!("2: {}", second(&content));
+    assert_eq!(1151792, first(content));
+    assert_eq!(21790168, second(content));
 }
