@@ -123,9 +123,40 @@ fn first_part(map: &Map) -> u32 {
     count
 }
 
+fn check_for_x_mass(x: usize, y: usize, map: &Map) -> bool {
+    if (x > 0 && x < map.len() - 1) && (y > 0 && y < map.len() - 1) {
+        if map[x][y] != 'A' {
+            return false;
+        }
+        if (map[x - 1][y - 1] == 'M') && (map[x + 1][y + 1] == 'S')
+            || (map[x - 1][y - 1] == 'S') && (map[x + 1][y + 1] == 'M')
+        {
+            if (map[x + 1][y - 1] == 'M') && (map[x - 1][y + 1] == 'S')
+                || (map[x + 1][y - 1] == 'S') && (map[x - 1][y + 1] == 'M')
+            {
+                // println!("got a match on ({},{})", x, y);
+                return true;
+            }
+        }
+    }
+    false
+}
+
+fn second_part(map: &Map) -> u32 {
+    let mut count = 0u32;
+    for x in 0..map.len() {
+        for y in 0..map[0].len() {
+            if check_for_x_mass(x, y, map) {
+                count += 1;
+            }
+        }
+    }
+    count
+}
+
 fn main() {
     let input = fs::read_to_string("input").expect("File not found");
     let input = input.trim();
     assert_eq!(2427, first_part(&parse_input(input)));
-    println!("{:?}", first_part(&parse_input(input)));
+    assert_eq!(1900, second_part(&parse_input(input)));
 }
